@@ -131,3 +131,4 @@ If you are working in a group of two, you must both contribute to the project. T
 - [PyGame Tutorial](https://www.pygame.org/wiki/tutorials)
 - [PyGame Examples](https://www.pygame.org/docs/ref/examples.html)
 - [Game Development with PyGame](https://www.youtube.com/watch?v=VO8rTszcW4s&list=PLsk-HSGFjnaH5yghzu7PcOzm9NhsW0Urw)
+
