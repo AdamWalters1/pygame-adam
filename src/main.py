@@ -2,17 +2,31 @@
 
 import pygame
 from player import Player
-
+import sys
+from obstacle import Obstacle
 # Initialize Pygame
 pygame.init()
 
 # Set up display
 WIDTH, HEIGHT = 800, 600
 win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("My Game")
+pygame.display.set_caption("Driving Among Idiots")
 
-# Create player
-player = Player(WIDTH//2, HEIGHT//2)
+GREY = (128, 128, 128)  # RGB values for grey
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
+player_size = 50
+player_speed = 5
+player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed)
+
+# Obstacles
+obstacles = [
+    Obstacle(200, 300, 30, GREEN),  # Example tree
+    Obstacle(400, 100, 100, RED),  # Example building
+    Obstacle(600, 400, 20, WHITE)   # Example person
+]
 
 # Main game loop
 running = True
@@ -24,13 +38,18 @@ while running:
     keys = pygame.key.get_pressed()
     player.move(keys)
 
-    # Game logic (score, game over condition, etc.)
+    
+    # background
+    win.fill(GREY)
 
-    # Update display
-    win.fill((0, 0, 0))  # Clear screen
+    for obstacle in obstacles:
+        obstacle.draw(win)
+
     # Draw game objects
-    pygame.draw.rect(win, (255, 0, 0), (player.x, player.y, 50, 50))  # Example: drawing player as a red rectangle
-    pygame.display.update()  # Update display
+    player.draw(win)
 
+    pygame.display.update()  # Update display
+    pygame.time.Clock().tick(60)
 # Quit Pygame
 pygame.quit()
+sys.exit()
