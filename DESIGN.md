@@ -16,7 +16,7 @@
   - City assets
   -![alt text](CP_V1.0.4.png)
   - Some will have collision, like buildings and trees, others wont.
-  - 
+  - Sound assets in my assets folder
 - Game Screens (e.g., main menu, game screen, game over screen, etc.)
 - Game Flowchart/Storyline (i.e., how the game progresses)
   The main menu gives a brief textual story on the player being new to a city and having to survive driving in it.

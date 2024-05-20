@@ -1,13 +1,6 @@
 
 # Driving Among Idiots
 
-## Getting Started
-
-1. Create a repository with this template to the class GitHub with you and your partner's name in the title, e.g., `connect4-alice-bob`.
-   - If the repository is not in the class GitHub, you will not receive credit for the project.
-2. Add your partner as a collaborator to the repository.
-3. Clone this repository to your local machine.
-
 ## Introduction
 
 This project is simple: make a graphical game using Python.
