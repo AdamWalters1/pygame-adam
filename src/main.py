@@ -33,15 +33,15 @@ car1 = car_images[0:4]
 car2 = car_images[4:8]
 car3 = car_images[12:16]
 
-print(len(car1))
+
 
 player_size = 50
 player_speed = 5
-player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
+player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
 
 # Define road grid
 GRID_SIZE = 100  # Size of each grid square
-ROAD_WIDTH = 50
+ROAD_WIDTH = 60
 NUM_ROWS = HEIGHT // GRID_SIZE
 NUM_COLS = WIDTH // GRID_SIZE
 
@@ -83,18 +83,18 @@ obstacle_cars = [
 randomnum = randint(1,2)
 
 # Load background music and sound effects
-#if randomnum == 1:  
-    #background_music_path = os.path.join('..', 'assets', 'sounds', 'backgroundTraffic1.wav')
-#else:
-    #background_music_path = os.path.join('..', 'assets', 'sounds', 'backgroundTraffic22.wav')
+if randomnum == 1:  
+    background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic1.wav'
+else:
+    background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic2.wav'
 
 
-#effect_path = os.path.join('..', 'assets', 'sounds', 'effect.wav')
+effect_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/passing.wav'
 
-#pygame.mixer.music.load(background_music_path)
-#pygame.mixer.music.play(-1)  # Play the background music in a loop
+pygame.mixer.music.load(background_music_path)
+pygame.mixer.music.play(-1)  # Play the background music in a loop
 
-#effect = pygame.mixer.Sound(effect_path)
+effect = pygame.mixer.Sound(effect_path)
 
 # Main game loop
 running = True
@@ -105,9 +105,12 @@ while running:
 
     keys = pygame.key.get_pressed()
     player.move(keys)
+    
+    player.check_collision(obstacles + buildings, obstacle_cars)
 
-    #if keys[pygame.K_UP] or keys[pygame.K_DOWN] or keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
+    #if keys[pygame.K_UP] or keys[pygame.K_DOWN]:
         #effect.play()
+        
     for obstacle_car in obstacle_cars:
         obstacle_car.move()
     # background
@@ -130,8 +133,13 @@ while running:
     # Draw game objects
     player.draw(win)
 
+    # Displaying damage
+    font = pygame.font.SysFont(None, 36)
+    damage_text = font.render(f"Damage: {player.damage}/{player.max_damage}", True, RED)
+    win.blit(damage_text, (10, 10))
+
     pygame.display.update()  # Update display
-    pygame.time.Clock().tick(10)
+    pygame.time.Clock().tick(30)
     
 # Quit Pygame
 pygame.quit()

@@ -1,3 +1,4 @@
+# obstacle.py
 import pygame
 
 class Obstacle:
@@ -6,7 +7,8 @@ class Obstacle:
         self.y = y
         self.size = size
         self.color = color
-
+        self.rect = pygame.Rect(x, y, size, size)
+    
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, (self.x, self.y, self.size, self.size))
 
@@ -21,7 +23,8 @@ class ObstacleCar:
         self.direction = direction  # left, right, up or down
         self.car_images = car_images
         self.direction_index = 0
-
+        self.rect = pygame.Rect(x, y, size, size)
+        
         if self.direction == 'left':
             self.direction_index = 0  # Assuming index 0 for left images
         elif self.direction == 'right':
@@ -48,7 +51,8 @@ class ObstacleCar:
             self.y -= self.speed
             if self.y < -self.size:  # Assuming screen height of 600, reset position
                 self.y = 750
-
+                
+    
     def draw(self, surface):
         car_image = self.car_images[self.direction_index]
         surface.blit(car_image, (self.x, self.y))
