@@ -26,27 +26,44 @@ player_size = 50
 player_speed = 5
 player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed)
 
+car_images = []
+for i in range(16):
+    car_image = pygame.image.load(f'../assets/images/car_{i}.png').convert_alpha()
+    car_images.append(car_image)
+
+# Define road grid
+GRID_SIZE = 100  # Size of each grid square
+ROAD_WIDTH = 40
+NUM_ROWS = HEIGHT // GRID_SIZE
+NUM_COLS = WIDTH // GRID_SIZE
+
+# Create grid of roads
+roads = []
+for row in range(NUM_ROWS + 1):
+    # Horizontal roads
+    road_h = pygame.Rect(0, row * GRID_SIZE, WIDTH, ROAD_WIDTH)
+    roads.append(road_h)
+for col in range(NUM_COLS + 1):
+    # Vertical roads
+    road_v = pygame.Rect(col * GRID_SIZE, 0, ROAD_WIDTH, HEIGHT)
+    roads.append(road_v)
+
 # Obstacles
 obstacles = [
     Obstacle(200, 300, 30, GREEN),  # Example tree
-    Obstacle(400, 100, 100, RED),  # Example building
+    Obstacle(400, 100, 100, BLUE),  # Example building
     Obstacle(600, 400, 20, WHITE)   # Example person
 ]
 
 # Buildings as obstacles
 buildings = [
-    Obstacle(100, 100, 150, DARK_GREY),
-    Obstacle(300, 100, 100, DARK_GREY),
-    Obstacle(500, 100, 200, DARK_GREY),
-    Obstacle(100, 400, 200, DARK_GREY),
-    Obstacle(400, 400, 150, DARK_GREY)
+    Obstacle(100, 100, 150, GREY),
+    Obstacle(300, 100, 100, GREY),
+    Obstacle(500, 100, 200, GREY),
+    Obstacle(100, 400, 200, GREY),
+    Obstacle(400, 400, 150, GREY)
 ]
 
-# Roads
-roads = [
-    pygame.Rect(0, 250, WIDTH, 100),  # Horizontal road
-    pygame.Rect(350, 0, 100, HEIGHT)  # Vertical road
-]
 
 randomnum = randint(1,2)
 
@@ -78,11 +95,11 @@ while running:
         #effect.play()
 
     # background
-    win.fill(GREY)
+    win.fill(WHITE)
     
     # Draw roads
     for road in roads:
-        pygame.draw.rect(win, WHITE, road)
+        pygame.draw.rect(win, DARK_GREY, road)
 
     # Draw buildings
     for building in buildings:

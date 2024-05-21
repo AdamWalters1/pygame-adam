@@ -5,7 +5,7 @@ import pygame
 pygame.init()
 
 # Load the sprite sheet
-car_sprite_sheet = pygame.image.load('../assets/images/cars.png').convert_alpha()
+car_sprite_sheet = pygame.image.load('cars.png').convert_alpha()
 
 # Assume each car sprite is 64x64 pixels
 CAR_WIDTH = 64
