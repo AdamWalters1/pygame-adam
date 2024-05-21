@@ -27,17 +27,17 @@ class Player:
             self.angle = (self.angle + 90) % 360
 
         if self.angle == 0:
-            self.y -= self.current_speed
-            direction = 9
+            self.y += self.current_speed
+            self.direction = 11
         elif self.angle == 90:
             self.x += self.current_speed
-            direction = 11
+            self.direction = 10
         elif self.angle == 180:
-            self.y += self.current_speed
-            direction = 12
+            self.y -= self.current_speed
+            self.direction = 12
         elif self.angle == 270:
             self.x -= self.current_speed
-            direction = 10
+            self.direction = 9
 
 
     def draw(self, surface):

@@ -4,6 +4,7 @@ import pygame
 from player import Player
 import sys
 from obstacle import Obstacle
+from obstacle import ObstacleCar
 import random
 from random import randint
 import os
@@ -11,7 +12,7 @@ import os
 pygame.init()
 
 # Set up display
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1000, 800
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Driving Among Idiots")
 
@@ -28,14 +29,16 @@ for i in range(16):
     i +=1
     car_image = pygame.image.load(f'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/cars___take2/cars-{i}.png').convert_alpha()
     car_images.append(car_image)
-
+car1 = car_images[1:4]
+car2 = car_images[5:8]
+car3 = car_images[13:16]
 player_size = 50
 player_speed = 5
 player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
 
 # Define road grid
 GRID_SIZE = 100  # Size of each grid square
-ROAD_WIDTH = 40
+ROAD_WIDTH = 50
 NUM_ROWS = HEIGHT // GRID_SIZE
 NUM_COLS = WIDTH // GRID_SIZE
 
@@ -66,6 +69,13 @@ buildings = [
     Obstacle(400, 400, 150, GREY)
 ]
 
+# Create obstacle cars
+obstacle_cars = [
+    ObstacleCar(100, 200, 50, 3, 'horizontal', car1),
+    ObstacleCar(300, 400, 50, 3, 'horizontal', car2),
+    ObstacleCar(500, 100, 50, 3, 'vertical', car1),
+    ObstacleCar(700, 300, 50, 3, 'vertical', car3)
+]
 randomnum = randint(1,2)
 
 # Load background music and sound effects
@@ -94,7 +104,8 @@ while running:
 
     #if keys[pygame.K_UP] or keys[pygame.K_DOWN] or keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
         #effect.play()
-
+    for obstacle_car in obstacle_cars:
+        obstacle_car.move()
     # background
     win.fill(WHITE)
     
@@ -108,12 +119,15 @@ while running:
 
     for obstacle in obstacles:
         obstacle.draw(win)
+        
+    for obstacle_car in obstacle_cars:
+        obstacle_car.draw(win)
 
     # Draw game objects
     player.draw(win)
 
     pygame.display.update()  # Update display
-    pygame.time.Clock().tick(60)
+    pygame.time.Clock().tick(10)
     
     
 # Quit Pygame
