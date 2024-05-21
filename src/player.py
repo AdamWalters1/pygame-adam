@@ -39,6 +39,9 @@ class Player:
             self.x -= self.current_speed
             self.direction = 9
 
+        self.x = max(0, min(self.x, 1200 - self.size))
+        self.y = max(0, min(self.y, 750 - self.size))
+
 
     def draw(self, surface):
         car_image = self.car_images[self.direction-1]

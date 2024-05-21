@@ -12,7 +12,7 @@ import os
 pygame.init()
 
 # Set up display
-WIDTH, HEIGHT = 1000, 800
+WIDTH, HEIGHT = 1200, 750
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Driving Among Idiots")
 
@@ -29,9 +29,12 @@ for i in range(16):
     i +=1
     car_image = pygame.image.load(f'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/cars___take2/cars-{i}.png').convert_alpha()
     car_images.append(car_image)
-car1 = car_images[1:4]
-car2 = car_images[5:8]
-car3 = car_images[13:16]
+car1 = car_images[0:4]
+car2 = car_images[4:8]
+car3 = car_images[12:16]
+
+print(len(car1))
+
 player_size = 50
 player_speed = 5
 player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
@@ -71,10 +74,11 @@ buildings = [
 
 # Create obstacle cars
 obstacle_cars = [
-    ObstacleCar(100, 200, 50, 3, 'horizontal', car1),
-    ObstacleCar(300, 400, 50, 3, 'horizontal', car2),
-    ObstacleCar(500, 100, 50, 3, 'vertical', car1),
-    ObstacleCar(700, 300, 50, 3, 'vertical', car3)
+    ObstacleCar(100, 200, 50, 3, 'right', car1),
+    ObstacleCar(300, 400, 50, 3, 'left', car2),
+    ObstacleCar(500, 100, 50, 3, 'up', car1),
+    ObstacleCar(700, 300, 50, 3, 'down', car3),
+    ObstacleCar(900, 600, 50, 3, 'right',car2)
 ]
 randomnum = randint(1,2)
 
@@ -128,7 +132,6 @@ while running:
 
     pygame.display.update()  # Update display
     pygame.time.Clock().tick(10)
-    
     
 # Quit Pygame
 pygame.quit()
