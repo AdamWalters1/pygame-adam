@@ -28,7 +28,8 @@ player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, p
 
 car_images = []
 for i in range(16):
-    car_image = pygame.image.load(f'../assets/images/car_{i}.png').convert_alpha()
+    i +=1
+    car_image = pygame.image.load(f'assets/cars__take2/cars-{i}.png').convert_alpha()
     car_images.append(car_image)
 
 # Define road grid
