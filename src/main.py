@@ -22,15 +22,16 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 DARK_GREY = (50, 50, 50)
 
-player_size = 50
-player_speed = 5
-player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed)
 
 car_images = []
 for i in range(16):
     i +=1
     car_image = pygame.image.load(f'assets/cars__take2/cars-{i}.png').convert_alpha()
     car_images.append(car_image)
+
+player_size = 50
+player_speed = 5
+player = Player(WIDTH // 2 - player_size // 2, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
 
 # Define road grid
 GRID_SIZE = 100  # Size of each grid square

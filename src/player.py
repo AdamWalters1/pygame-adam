@@ -3,7 +3,7 @@
 import pygame
 
 class Player:
-    def __init__(self, x, y, size, speed):
+    def __init__(self, x, y, size, speed, car_images):
         self.x = x
         self.y = y
         self.size = size
@@ -20,4 +20,7 @@ class Player:
             self.x += self.speed
 
     def draw(self, surface):
-        pygame.draw.rect(surface, (255, 0, 0), (self.x, self.y, self.size, self.size))
+        car_image = self.car_images[self.direction]
+        surface.blit(car_image, (self.x, self.y))
+    #def draw(self, surface):
+        #pygame.draw.rect(surface, (255, 0, 0), (self.x, self.y, self.size, self.size))
