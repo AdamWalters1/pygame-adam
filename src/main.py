@@ -26,7 +26,7 @@ DARK_GREY = (50, 50, 50)
 car_images = []
 for i in range(16):
     i +=1
-    car_image = pygame.image.load(f'assets/cars__take2/cars-{i}.png').convert_alpha()
+    car_image = pygame.image.load(f'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/cars___take2/cars-{i}.png').convert_alpha()
     car_images.append(car_image)
 
 player_size = 50
@@ -65,7 +65,6 @@ buildings = [
     Obstacle(100, 400, 200, GREY),
     Obstacle(400, 400, 150, GREY)
 ]
-
 
 randomnum = randint(1,2)
 
