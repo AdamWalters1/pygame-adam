@@ -19,8 +19,6 @@ class Player:
         self.last_turn_time = 0
         self.turn_cooldown = 1  # Cooldown period in seconds between turns
 
-    
-
     def move(self, keys, obstacles, obstacle_cars):
         if keys[pygame.K_UP]:
             self.current_speed = self.speed

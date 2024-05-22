@@ -87,7 +87,7 @@ randomnum = randint(1,2)
 
 player_size = 50
 player_speed = 5
-player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
+player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2 + 10, player_size, player_speed, car_images)
 
 # Load background music and sound effects
 if randomnum == 1:  
@@ -96,7 +96,6 @@ if randomnum == 1:
     background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic1.wav'
 else:
     background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic2.wav'
-
 
 effect_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/passing.wav'
 
