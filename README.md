@@ -12,6 +12,7 @@
   Download folder for game including all assets and src files.
 
 - How to run the game
+- Must replace the visual and audio file paths with your file path to the game folder. Localized pathing wasnt working.
   Open cmd or terminal and run "cd path/to/DrivingAmongIdiots/src" replacing the path with your path
   Then run "python main.py" to run the main src file.
 

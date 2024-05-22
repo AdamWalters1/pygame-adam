@@ -91,6 +91,8 @@ player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 
 
 # Load background music and sound effects
 if randomnum == 1:  
+    # Replace all before the game name "DrivingAmongIdiots" with your file path
+    # (Local file pathing wasnt working)
     background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic1.wav'
 else:
     background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic2.wav'
