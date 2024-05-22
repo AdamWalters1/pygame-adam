@@ -24,7 +24,7 @@ class ObstacleCar:
         self.car_images = car_images
         self.direction_index = 0
         self.rect = pygame.Rect(x, y, size, size)
-        
+        self.crashed = False # flag that indicates if the car has crashed
         if self.direction == 'left':
             self.direction_index = 0  # Assuming index 0 for left images
         elif self.direction == 'right':
@@ -35,25 +35,29 @@ class ObstacleCar:
             self.direction_index = 3
 
     def move(self):
-        if self.direction == 'right':
-            self.x += self.speed
-            if self.x > 1200:  # Assuming screen width of 800, reset position
-                self.x = -self.size
-        elif self.direction == 'left':
-            self.x -= self.speed
-            if self.x < -self.size:  # Assuming screen width of 800, reset position
-                self.x = 1200
-        elif self.direction == 'down':
-            self.y += self.speed
-            if self.y > 750:  # Assuming screen height of 600, reset position
-                self.y = -self.size
-        elif self.direction == 'up':
-            self.y -= self.speed
-            if self.y < -self.size:  # Assuming screen height of 600, reset position
-                self.y = 750
+        if not self.crashed:
+            if self.direction == 'right':
+                self.x += self.speed
+                if self.x > 1200:  # Assuming screen width of 800, reset position
+                    self.x = -self.size
+            elif self.direction == 'left':
+                self.x -= self.speed
+                if self.x < -self.size:  # Assuming screen width of 800, reset position
+                    self.x = 1200
+            elif self.direction == 'down':
+                self.y += self.speed
+                if self.y > 750:  # Assuming screen height of 600, reset position
+                    self.y = -self.size
+            elif self.direction == 'up':
+                self.y -= self.speed
+                if self.y < -self.size:  # Assuming screen height of 600, reset position
+                    self.y = 750
                 
     
     def draw(self, surface):
-        car_image = self.car_images[self.direction_index]
-        surface.blit(car_image, (self.x, self.y))
-
+        if not self.crashed:
+            car_image = self.car_images[self.direction_index]
+            surface.blit(car_image, (self.x, self.y))
+        else:
+            crashed_car_image = self.car_images[self.direction_index]
+            surface.blit(crashed_car_image, (self.x, self.y))

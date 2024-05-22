@@ -98,6 +98,11 @@ class Player:
             new_y -= dy / abs(dy) * self.speed
 
         return new_x, new_y
+    def spawn_new_car(self):
+        # Randomly generate new coordinates for the obstacle car
+        x = random.randint(0, 1200 - self.size)
+        y = random.randint(0, 750 - self.size)
+        return x, y
     @property
     def rect(self):
         return pygame.Rect(self.x, self.y, self.size, self.size)
