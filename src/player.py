@@ -84,6 +84,8 @@ class Player:
                 if time.time() - self.last_collision_time > self.collision_cooldown:
                     self.damage += 20
                     self.last_collision_time = time.time()
+                    obstacle_car.crashed = True
+                    
                     break
                 
     def avoid_collision(self, new_x, new_y, obstacle_rect):

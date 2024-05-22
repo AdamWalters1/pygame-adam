@@ -22,7 +22,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 DARK_GREY = (50, 50, 50)
-
+D_GREY = (75, 75, 75)
 
 car_images = []
 for i in range(16):
@@ -54,26 +54,34 @@ for col in range(NUM_COLS + 1):
 # Obstacles
 obstacles = [
     Obstacle(200, 300, 30, GREEN),  # Example tree
-    Obstacle(400, 100, 100, BLUE),  # Example building
     Obstacle(600, 400, 20, WHITE)   # Example person
 ]
 
 # Buildings as obstacles
 buildings = [
-    Obstacle(100, 100, 150, GREY),
-    Obstacle(300, 100, 100, GREY),
-    Obstacle(500, 100, 200, GREY),
-    Obstacle(100, 400, 200, GREY),
-    Obstacle(400, 400, 150, GREY)
+    Obstacle(100, 0, 150, D_GREY),
+    Obstacle(300, 100, 100, D_GREY),
+    Obstacle(550, 100, 100, D_GREY),
+    Obstacle(100, 300, 100, D_GREY),
+    Obstacle(900, 450, 150, D_GREY),
+    Obstacle(600, 700, 50, D_GREY),
+    Obstacle(1000, 500, 100, D_GREY),
+    Obstacle(1100, 30, 150, D_GREY),
+    Obstacle(1050, 0, 200, D_GREY),
+    Obstacle(150, 650, 125, D_GREY),
 ]
 
 # Create obstacle cars
 obstacle_cars = [
     ObstacleCar(100, 200, 50, 3, 'right', car1),
+    ObstacleCar(100, 500, 50, 3, 'right', car3),
     ObstacleCar(300, 400, 50, 3, 'left', car2),
     ObstacleCar(500, 100, 50, 3, 'up', car1),
+    ObstacleCar(525, 200, 50, 3, 'down', car2),
     ObstacleCar(700, 300, 50, 3, 'down', car3),
-    ObstacleCar(900, 600, 50, 3, 'right',car2)
+    ObstacleCar(800, 650, 50, 3, 'up', car2),
+    ObstacleCar(900, 500, 50, 3, 'right',car2)
+    
 ]
 randomnum = randint(1,2)
 
@@ -95,51 +103,132 @@ pygame.mixer.music.play(-1)  # Play the background music in a loop
 
 effect = pygame.mixer.Sound(effect_path)
 
+def welcome_screen(win):
+    font = pygame.font.Font(None, 74)
+    title_text = font.render('Driving Among Idiots', True, (255, 0, 0))
+    title_rect = title_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 50))
+
+    start_font = pygame.font.Font(None, 36)
+    start_text = start_font.render('Press Space to Start', True, (255, 255, 255))
+    start_rect = start_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
+
+    win.fill((0, 0, 0))
+    win.blit(title_text, title_rect)
+    win.blit(start_text, start_rect)
+    pygame.display.update()
+
+    waiting_for_start = True
+    while waiting_for_start:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    waiting_for_start = False
+                    
+# Game over screen, option to restart
+def game_over_screen(win):
+    font = pygame.font.Font(None, 74)
+    text = font.render('Game Over', True, (255, 0, 0))
+    text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+    restart_font = pygame.font.Font(None, 36)
+    restart_text = restart_font.render('Press R to Restart', True, (255, 255, 255))
+    restart_rect = restart_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
+
+    win.fill((0, 0, 0))
+    win.blit(text, text_rect)
+    win.blit(restart_text, restart_rect)
+    pygame.display.update()
+
+    waiting_for_restart = True
+    while waiting_for_restart:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    waiting_for_restart = False
+                    return True
+
+    return False
+
+
+
 # Main game loop
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+def main():
+    pygame.init()
+    win = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Driving Among Idiots")
 
-    keys = pygame.key.get_pressed()
-    player.move(keys, obstacles, obstacle_cars)
-    
-    player.check_collision(obstacles + buildings, obstacle_cars)
+    # Call the welcome screen
+    welcome_screen(win)
 
-    #if keys[pygame.K_UP] or keys[pygame.K_DOWN]:
-        #effect.play()
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        keys = pygame.key.get_pressed()
+        player.move(keys, obstacles, obstacle_cars)
         
-    for obstacle_car in obstacle_cars:
-        obstacle_car.move()
-    # background
-    win.fill(WHITE)
-    
-    # Draw roads
-    for road in roads:
-        pygame.draw.rect(win, DARK_GREY, road)
+        player.check_collision(obstacles + buildings, obstacle_cars)
 
-    # Draw buildings
-    for building in buildings:
-        building.draw(win)
+        #if keys[pygame.K_UP] or keys[pygame.K_DOWN]:
+            #effect.play()
+        if player.damage >= player.max_damage:
+            if game_over_screen(win):
+                # Reset the game state
+                player.x = WIDTH // 2 - player_size // 2 + 20  # Adjusted spawn point
+                player.y = HEIGHT // 2 - player_size // 2
+                player.angle = 0
+                player.damage = 0
 
-    for obstacle in obstacles:
-        obstacle.draw(win)
+                # Reset obstacle cars
+                for obstacle_car in obstacle_cars:
+                    obstacle_car.crashed = False
+                    # Optionally, reset positions or create new obstacle cars
+                    obstacle_car.x = random.randint(0, WIDTH)
+                    obstacle_car.y = random.randint(0, HEIGHT)
+            else:
+                game_over_screen(win)
+                
+        for obstacle_car in obstacle_cars:
+            obstacle_car.move()
+        # background
+        win.fill(GREY)
         
-    for obstacle_car in obstacle_cars:
-        obstacle_car.draw(win)
+        # Draw roads
+        for road in roads:
+            pygame.draw.rect(win, DARK_GREY, road)
 
-    # Draw game objects
-    player.draw(win)
+        # Draw buildings
+        for building in buildings:
+            building.draw(win)
 
-    # Displaying damage
-    font = pygame.font.SysFont(None, 36)
-    damage_text = font.render(f"Damage: {player.damage}/{player.max_damage}", True, RED)
-    win.blit(damage_text, (10, 10))
+        for obstacle in obstacles:
+            obstacle.draw(win)
+            
+        for obstacle_car in obstacle_cars:
+            obstacle_car.draw(win)
 
-    pygame.display.update()  # Update display
-    pygame.time.Clock().tick(30)
-    
+        # Draw game objects
+        player.draw(win)
+
+        # Displaying damage
+        font = pygame.font.SysFont(None, 36)
+        damage_text = font.render(f"Damage: {player.damage}/{player.max_damage}", True, RED)
+        win.blit(damage_text, (10, 10))
+
+        pygame.display.update()  # Update display
+        pygame.time.Clock().tick(30)
+        
 # Quit Pygame
-pygame.quit()
-sys.exit()
+    pygame.quit()
+    sys.exit()
+    
+if __name__ == "__main__":
+    main()

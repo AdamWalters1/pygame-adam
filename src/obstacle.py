@@ -52,6 +52,7 @@ class ObstacleCar:
                 self.y -= self.speed
                 if self.y < -self.size:  # Assuming screen height of 600, reset position
                     self.y = 750
+        self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
                 
     
     def draw(self, surface):
