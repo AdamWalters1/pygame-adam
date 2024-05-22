@@ -19,8 +19,9 @@ class Player:
         self.last_turn_time = 0
         self.turn_cooldown = 1  # Cooldown period in seconds between turns
 
+    
 
-    def move(self, keys):
+    def move(self, keys, obstacles, obstacle_cars):
         if keys[pygame.K_UP]:
             self.current_speed = self.speed
         elif keys[pygame.K_DOWN]:
@@ -34,6 +35,9 @@ class Player:
             self.angle = (self.angle + 90) % 360
             self.last_turn_time = time.time()
 
+        new_x = self.x
+        new_y = self.y
+        
         if self.angle == 0:
             self.y += self.current_speed
             self.direction = 11
@@ -46,6 +50,17 @@ class Player:
         elif self.angle == 270:
             self.x -= self.current_speed
             self.direction = 9
+        
+        new_rect = pygame.Rect(new_x, new_y, self.size, self.size)
+
+        for obstacle in obstacles:
+            if new_rect.colliderect(obstacle.rect):
+                self.x, self.y = self.avoid_collision(new_x, new_y, obstacle.rect)
+
+        # Check collision with obstacle cars
+        for obstacle_car in obstacle_cars:
+            if new_rect.colliderect(obstacle_car.rect):
+                self.x, self.y = self.avoid_collision(new_x, new_y, obstacle_car.rect)
 
         self.x = max(0, min(self.x, 1200 - self.size))
         self.y = max(0, min(self.y, 750 - self.size))
@@ -70,7 +85,19 @@ class Player:
                     self.damage += 20
                     self.last_collision_time = time.time()
                     break
+                
+    def avoid_collision(self, new_x, new_y, obstacle_rect):
+        # Calculate the distance between the player and the obstacle
+        dx = obstacle_rect.centerx - new_x
+        dy = obstacle_rect.centery - new_y
 
+        # Move the player away from the obstacle along the shortest axis
+        if abs(dx) > abs(dy):
+            new_x -= dx / abs(dx) * self.speed
+        else:
+            new_y -= dy / abs(dy) * self.speed
+
+        return new_x, new_y
     @property
     def rect(self):
         return pygame.Rect(self.x, self.y, self.size, self.size)

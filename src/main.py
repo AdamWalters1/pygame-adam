@@ -34,11 +34,6 @@ car2 = car_images[4:8]
 car3 = car_images[12:16]
 
 
-
-player_size = 50
-player_speed = 5
-player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
-
 # Define road grid
 GRID_SIZE = 100  # Size of each grid square
 ROAD_WIDTH = 60
@@ -82,6 +77,10 @@ obstacle_cars = [
 ]
 randomnum = randint(1,2)
 
+player_size = 50
+player_speed = 5
+player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2, player_size, player_speed, car_images)
+
 # Load background music and sound effects
 if randomnum == 1:  
     background_music_path = 'C:/Users/adamw/OneDrive/Documents/Comp Sci/DrivingAmongIdiots-adam/assets/sounds/backgroundTraffic1.wav'
@@ -104,7 +103,7 @@ while running:
             running = False
 
     keys = pygame.key.get_pressed()
-    player.move(keys)
+    player.move(keys, obstacles, obstacle_cars)
     
     player.check_collision(obstacles + buildings, obstacle_cars)
 
