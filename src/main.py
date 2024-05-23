@@ -8,6 +8,8 @@ from obstacle import ObstacleCar
 import random
 from random import randint
 import os
+import time
+
 # Initialize Pygame
 pygame.init()
 
@@ -37,15 +39,37 @@ car3 = car_images[12:16]
 # Define road grid
 GRID_SIZE = 100  # Size of each grid square
 ROAD_WIDTH = 60
-NUM_ROWS = HEIGHT // GRID_SIZE
-NUM_COLS = WIDTH // GRID_SIZE
+NUM_ROWS = 8
+NUM_COLS = 12
 
+# Create grid layout (0 = road, 1 = building)
+grid_layout = [
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+]
+
+
+buildings = []
+for row in range(NUM_ROWS + 1):
+    for col in range(NUM_COLS + 1):
+        if grid_layout[row][col] == 1:
+            building = Obstacle(col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE+10, GREY)
+            buildings.append(building)
+            
 # Create grid of roads
 roads = []
 for row in range(NUM_ROWS + 1):
     # Horizontal roads
     road_h = pygame.Rect(0, row * GRID_SIZE, WIDTH, ROAD_WIDTH)
     roads.append(road_h)
+    
 for col in range(NUM_COLS + 1):
     # Vertical roads
     road_v = pygame.Rect(col * GRID_SIZE, 0, ROAD_WIDTH, HEIGHT)
@@ -58,36 +82,41 @@ obstacles = [
 ]
 
 # Buildings as obstacles
-buildings = [
-    Obstacle(100, 0, 150, D_GREY),
-    Obstacle(300, 100, 100, D_GREY),
-    Obstacle(550, 100, 100, D_GREY),
-    Obstacle(100, 300, 100, D_GREY),
-    Obstacle(900, 450, 150, D_GREY),
-    Obstacle(600, 700, 50, D_GREY),
-    Obstacle(1000, 500, 100, D_GREY),
-    Obstacle(1100, 30, 150, D_GREY),
-    Obstacle(1050, 0, 200, D_GREY),
-    Obstacle(150, 650, 125, D_GREY),
-]
+#buildings = [
+    #Obstacle(100, 0, 150, D_GREY),
+    #Obstacle(300, 100, 100, D_GREY),
+    #Obstacle(550, 100, 100, D_GREY),
+    #Obstacle(100, 300, 100, D_GREY),
+    #Obstacle(900, 450, 150, D_GREY),
+    #Obstacle(600, 700, 50, D_GREY),
+    #Obstacle(1000, 500, 100, D_GREY),
+    #Obstacle(1100, 30, 150, D_GREY),
+    #Obstacle(1050, 0, 200, D_GREY),
+    #Obstacle(150, 650, 125, D_GREY),
+#]
 
 # Create obstacle cars
 obstacle_cars = [
-    ObstacleCar(100, 200, 50, 3, 'right', car1),
+    ObstacleCar(100, 325, 50, 3, 'right', car1),
     ObstacleCar(100, 500, 50, 3, 'right', car3),
-    ObstacleCar(300, 400, 50, 3, 'left', car2),
-    ObstacleCar(500, 100, 50, 3, 'up', car1),
-    ObstacleCar(525, 200, 50, 3, 'down', car2),
+    ObstacleCar(300, 350, 50, 3, 'left', car2),
+    ObstacleCar(525, 125, 50, 3, 'up', car1),
+    ObstacleCar(550, 200, 50, 3, 'down', car2),
     ObstacleCar(700, 300, 50, 3, 'down', car3),
     ObstacleCar(800, 650, 50, 3, 'up', car2),
-    ObstacleCar(900, 500, 50, 3, 'right',car2)
-    
+    ObstacleCar(900, 375, 50, 3, 'right',car2)
 ]
+
 randomnum = randint(1,2)
 
 player_size = 50
 player_speed = 5
 player = Player(WIDTH // 2 - player_size // 2 +20, HEIGHT // 2 - player_size // 2 + 10, player_size, player_speed, car_images)
+# Initialize font
+font = pygame.font.Font(None, 36)
+
+# Initialize timer
+start_time = time.time()
 
 # Load background music and sound effects
 if randomnum == 1:  
@@ -156,8 +185,6 @@ def game_over_screen(win):
 
     return False
 
-
-
 # Main game loop
 def main():
     pygame.init()
@@ -199,12 +226,21 @@ def main():
                 
         for obstacle_car in obstacle_cars:
             obstacle_car.move()
+            
+        elapsed_time = time.time() - start_time
+        elapsed_minutes = int(elapsed_time // 60)
+        elapsed_seconds = int(elapsed_time % 60)
+        timer_text = f"Time: {elapsed_minutes:02}:{elapsed_seconds:02}"
+    
         # background
-        win.fill(GREY)
+        win.fill(WHITE)
         
         # Draw roads
-        for road in roads:
-            pygame.draw.rect(win, DARK_GREY, road)
+        for row in range(NUM_ROWS):
+            for col in range(NUM_COLS):
+                if grid_layout[row][col] == 0:
+                    road_rect = pygame.Rect(col * GRID_SIZE, row * GRID_SIZE, GRID_SIZE, GRID_SIZE)
+                    pygame.draw.rect(win, DARK_GREY, road_rect)
 
         # Draw buildings
         for building in buildings:
@@ -224,6 +260,9 @@ def main():
         damage_text = font.render(f"Damage: {player.damage}/{player.max_damage}", True, RED)
         win.blit(damage_text, (10, 10))
 
+        timer_surface = font.render(timer_text, True, (0, 0, 0))
+        win.blit(timer_surface, (1000, 10))
+    
         pygame.display.update()  # Update display
         pygame.time.Clock().tick(30)
         

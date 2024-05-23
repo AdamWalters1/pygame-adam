@@ -12,8 +12,6 @@ class Obstacle:
     def draw(self, surface):
         pygame.draw.rect(surface, self.color, (self.x, self.y, self.size, self.size))
 
-import pygame
-
 class ObstacleCar:
     def __init__(self, x, y, size, speed, direction, car_images):
         self.x = x

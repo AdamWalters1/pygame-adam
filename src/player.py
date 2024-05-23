@@ -15,11 +15,15 @@ class Player:
         self.damage = 0
         self.max_damage = 100
         self.last_collision_time = 0
-        self.collision_cooldown = 3  # Cooldown period in seconds
+        self.collision_cooldown = 2  # Cooldown period in seconds
         self.last_turn_time = 0
         self.turn_cooldown = 1  # Cooldown period in seconds between turns
-
+        self.crashed = False
+        
     def move(self, keys, obstacles, obstacle_cars):
+        if self.crashed:
+            return
+
         if keys[pygame.K_UP]:
             self.current_speed = self.speed
         elif keys[pygame.K_DOWN]:
@@ -50,7 +54,7 @@ class Player:
             self.direction = 9
         
         new_rect = pygame.Rect(new_x, new_y, self.size, self.size)
-
+        collision_occured = False
         for obstacle in obstacles:
             if new_rect.colliderect(obstacle.rect):
                 self.x, self.y = self.avoid_collision(new_x, new_y, obstacle.rect)
@@ -74,7 +78,7 @@ class Player:
                 if time.time() - self.last_collision_time > self.collision_cooldown:
                     self.damage += 10
                     self.last_collision_time = time.time()
-                    break
+                break
 
         # Check collision with obstacle cars
         for obstacle_car in obstacle_cars:
@@ -98,6 +102,17 @@ class Player:
             new_y -= dy / abs(dy) * self.speed
 
         return new_x, new_y
+    
+    def repel(self, obstacle_rect):
+        if self.angle == 0:
+            self.y = obstacle_rect.top - self.size
+        elif self.angle == 90:
+            self.x = obstacle_rect.left - self.size
+        elif self.angle == 180:
+            self.y = obstacle_rect.bottom
+        elif self.angle == 270:
+            self.x = obstacle_rect.right
+        self.rect.topleft = (self.x, self.y)
     def spawn_new_car(self):
         # Randomly generate new coordinates for the obstacle car
         x = random.randint(0, 1200 - self.size)
